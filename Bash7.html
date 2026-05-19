@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bashewam School Management Portal</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#081120,#102542,#09111f);
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+:root{
+--gold:#d4af37;
+--dark:#081120;
+--card:rgba(255,255,255,0.08);
+}
+
+.container{
+width:95%;
+max-width:1300px;
+margin:auto;
+padding:20px;
+}
+
+.glass{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,0.1);
+border-radius:25px;
+box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+button{
+cursor:pointer;
+}
+
+/* WELCOME PAGE */
+#welcomePage{
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+height:100vh;
+}
+
+.hero{
+padding:50px 30px;
+width:100%;
+max-width:700px;
+}
+
+.logo{
+width:180px;
+height:180px;
+border-radius:50%;
+border:5px solid var(--gold);
+margin-bottom:25px;
+object-fit:cover;
+box-shadow:0 0 40px rgba(212,175,55,0.7);
+}
+
+.school-title{
+font-size:3rem;
+color:var(--gold);
+margin-bottom:10px;
+}
+
+.motto{
+font-size:1.2rem;
+margin-bottom:15px;
+color:#ddd;
+}
+
+.subtitle{
+font-size:1.1rem;
+margin-bottom:35px;
+}
+
+.btn{
+padding:15px 45px;
+border:none;
+border-radius:40px;
+background:var(--gold);
+color:black;
+font-weight:700;
+font-size:1rem;
+transition:0.3s;
+}
+
+.btn:hover{
+transform:translateY(-5px);
+box-shadow:0 0 25px var(--gold);
+}
+
+/* LOGIN PAGE */
+#loginPage,
+#dashboardPage,
+#studentModal{
+display:none;
+}
+
+.section-title{
+text-align:center;
+font-size:2.3rem;
+margin-bottom:30px;
+color:var(--gold);
+}
+
+.login-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
+}
+
+.login-card{
+padding:30px 20px;
+text-align:center;
+transition:0.3s;
+}
+
+.login-card:hover{
+transform:translateY(-10px);
+border:1px solid var(--gold);
+}
+
+.login-icon{
+font-size:4rem;
+margin-bottom:15px;
+}
+
+.input-group{
+position:relative;
+margin:12px 0;
+}
+
+.input-group input{
+width:100%;
+padding:13px;
+border-radius:10px;
+border:none;
+background:rgba(0,0,0,0.3);
+color:white;
+font-size:15px;
+}
+
+.eye-btn{
+position:absolute;
+right:12px;
+top:50%;
+transform:translateY(-50%);
+background:none;
+border:none;
+color:white;
+font-size:18px;
+}
+
+.small-btn{
+padding:11px 25px;
+margin-top:10px;
+}
+
+/* DASHBOARD */
+.top-bar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+flex-wrap:wrap;
+gap:15px;
+}
+
+.dashboard-box{
+padding:30px;
+margin-top:20px;
+}
+
+.search-box{
+padding:12px;
+border-radius:10px;
+border:none;
+width:250px;
+}
+
+.table-container{
+overflow-x:auto;
+}
+
+.table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+.table th{
+background:var(--gold);
+color:black;
+padding:14px;
+}
+
+.table td{
+padding:14px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+text-align:center;
+}
+
+.table tr:hover{
+background:rgba(212,175,55,0.1);
+}
+
+.behaviorA{
+color:#2ecc71;
+font-weight:bold;
+}
+
+.behaviorB{
+color:#f1c40f;
+font-weight:bold;
+}
+
+.behaviorC{
+color:#e74c3c;
+font-weight:bold;
+}
+
+/* MODAL */
+.modal-overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:none;
+z-index:999;
+}
+
+.modal{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:95%;
+max-width:700px;
+padding:30px;
+display:none;
+z-index:1000;
+max-height:90vh;
+overflow-y:auto;
+}
+
+.subject-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin:20px 0;
+}
+
+.subject-card{
+padding:15px;
+background:rgba(255,255,255,0.08);
+border-radius:12px;
+text-align:center;
+}
+
+.teacher-box{
+padding:15px;
+margin-top:10px;
+background:rgba(255,255,255,0.05);
+border-left:4px solid var(--gold);
+border-radius:8px;
+}
+
+.performance-box{
+padding:15px;
+border-radius:10px;
+margin:20px 0;
+font-weight:600;
+}
+
+.good{
+background:rgba(46,204,113,0.15);
+color:#2ecc71;
+}
+
+.average{
+background:rgba(241,196,15,0.15);
+color:#f1c40f;
+}
+
+.bad{
+background:rgba(231,76,60,0.15);
+color:#e74c3c;
+}
+
+.edit-box input{
+width:100%;
+padding:12px;
+margin:8px 0;
+border-radius:10px;
+border:none;
+}
+
+.logout-btn{
+background:#e74c3c;
+color:white;
+padding:12px 20px;
+border:none;
+border-radius:10px;
+}
+
+@media(max-width:700px){
+.school-title{
+font-size:2rem;
+}
+
+.subject-grid{
+grid-template-columns:1fr;
+}
+}
+</style>
+</head>
+
+<body>
+
+<!-- WELCOME PAGE -->
+<section id="welcomePage">
+<div class="hero glass">
+<img class="logo" src="https://www.bashewam.edu.et/wp-content/uploads/2022/08/cropped-Bashewam-Logo.png" alt="Bashewam School Logo">
+<h1 class="school-title">BASHEWAM SCHOOL</h1>
+<p class="motto">Building Future Generation With Discipline</p>
+<p class="subtitle">Students Performance and Management Portal</p>
+<button class="btn" onclick="openLogin()">Continue</button>
+</div>
+</section>
+
+<!-- LOGIN PAGE -->
+<section id="loginPage" class="container">
+<h1 class="section-title">Login Portal</h1>
+
+<div class="login-grid">
+
+<div class="login-card glass">
+<div class="login-icon">🎓</div>
+<h2>Student</h2>
+<div class="input-group">
+<input type="email" id="studentEmail" placeholder="Student Email">
+</div>
+<div class="input-group">
+<input type="password" id="studentPass" placeholder="Password (6+ characters)">
+<button class="eye-btn" onclick="togglePassword('studentPass')">👁</button>
+</div>
+<button class="btn small-btn" onclick="login('Student')">Login</button>
+</div>
+
+<div class="login-card glass">
+<div class="login-icon">👨‍👩‍👧</div>
+<h2>Parent</h2>
+<div class="input-group">
+<input type="email" id="parentEmail" placeholder="Parent Email">
+</div>
+<div class="input-group">
+<input type="password" id="parentPass" placeholder="Password (6+ characters)">
+<button class="eye-btn" onclick="togglePassword('parentPass')">👁</button>
+</div>
+<button class="btn small-btn" onclick="login('Parent')">Login</button>
+</div>
+
+<div class="login-card glass">
+<div class="login-icon">🧑‍🏫</div>
+<h2>Teacher</h2>
+<div class="input-group">
+<input type="email" id="teacherEmail" placeholder="Teacher Email">
+</div>
+<div class="input-group">
+<input type="password" id="teacherPass" placeholder="Password (6+ characters)">
+<button class="eye-btn" onclick="togglePassword('teacherPass')">👁</button>
+</div>
+<button class="btn small-btn" onclick="login('Teacher')">Login</button>
+</div>
+
+<div class="login-card glass">
+<div class="login-icon">🏛️</div>
+<h2>Director</h2>
+<div class="input-group">
+<input type="email" id="directorEmail" placeholder="Director Email">
+</div>
+<div class="input-group">
+<input type="password" id="directorPass" placeholder="Password (6+ characters)">
+<button class="eye-btn" onclick="togglePassword('directorPass')">👁</button>
+</div>
+<button class="btn small-btn" onclick="login('Director')">Login</button>
+</div>
+
+<div class="login-card glass">
+<div class="login-icon">💻</div>
+<h2>Administrator</h2>
+<div class="input-group">
+<input type="email" id="adminEmail" placeholder="Administrator Email">
+</div>
+<div class="input-group">
+<input type="password" id="adminPass" placeholder="Password (6+ characters)">
+<button class="eye-btn" onclick="togglePassword('adminPass')">👁</button>
+</div>
+<button class="btn small-btn" onclick="login('Administrator')">Login</button>
+</div>
+
+</div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboardPage" class="container">
+<div class="dashboard-box glass">
+
+<div class="top-bar">
+<div>
+<h1 id="dashboardTitle">Dashboard</h1>
+<p id="welcomeText"></p>
+</div>
+
+<div>
+<input type="text" class="search-box" id="searchInput" placeholder="Search Student" onkeyup="searchStudent()">
+<button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+</div>
+
+<div class="table-container">
+<table class="table">
+<thead>
+<tr>
+<th>Rank</th>
+<th>Name</th>
+<th>Grade</th>
+<th>Section</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody id="studentTable"></tbody>
+</table>
+</div>
+
+</div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="overlay" onclick="closeModal()"></div>
+
+<div class="modal glass" id="studentModal">
+<h1 id="studentName"></h1>
+<p id="studentInfo"></p>
+
+<div class="performance-box" id="performanceMessage"></div>
+
+<h2>Subject Results</h2>
+<div class="subject-grid" id="subjectResults"></div>
+
+<div id="specialSection"></div>
+
+<button class="btn" style="margin-top:20px;width:100%;" onclick="closeModal()">Close</button>
+</div>
+
+<script>
+
+let currentRole = "";
+
+const teachers = [
+{
+name:'Mr. Abraham',
+subject:'Mathematics',
+email:'abraham@bashewam.com',
+phone:'0911223344'
+},
+{
+name:'Ms. Helen',
+subject:'Biology',
+email:'helen@bashewam.com',
+phone:'0911887766'
+},
+{
+name:'Mr. Tadesse',
+subject:'English',
+email:'tadesse@bashewam.com',
+phone:'0912345678'
+},
+{
+name:'Ms. Kalkidan',
+subject:'Chemistry',
+email:'kalkidan@bashewam.com',
+phone:'0944556677'
+},
+{
+name:'Mr. Brook',
+subject:'Physics',
+email:'brook@bashewam.com',
+phone:'0922334455'
+},
+{
+name:'Ms. Selam',
+subject:'Civics',
+email:'selam@bashewam.com',
+phone:'0933445566'
+}
+];
+
+const students = [
+{
+name:'Abebe Kebede',
+grade:98,
+section:'10-A',
+year:'2025',
+behavior:'A',
+subjects:{Math:99,English:95,Physics:97,Chemistry:96,Biology:98,Civics:94}
+},
+{
+name:'Sara Mohammed',
+grade:96,
+section:'10-B',
+year:'2025',
+behavior:'A',
+subjects:{Math:96,English:97,Physics:95,Chemistry:94,Biology:98,Civics:96}
+},
+{
+name:'Yonas Tadesse',
+grade:95,
+section:'10-C',
+year:'2025',
+behavior:'A',
+subjects:{Math:94,English:95,Physics:96,Chemistry:95,Biology:93,Civics:97}
+},
+{
+name:'Meryem Ali',
+grade:94,
+section:'10-D',
+year:'2025',
+behavior:'A',
+subjects:{Math:95,English:94,Physics:92,Chemistry:95,Biology:96,Civics:92}
+},
+{
+name:'Samuel Girma',
+grade:93,
+section:'10-A',
+year:'2025',
+behavior:'A',
+subjects:{Math:92,English:93,Physics:94,Chemistry:91,Biology:95,Civics:93}
+},
+{
+name:'Rahel Tesfaye',
+grade:91,
+section:'10-B',
+year:'2025',
+behavior:'B',
+subjects:{Math:90,English:92,Physics:91,Chemistry:93,Biology:90,Civics:89}
+},
+{
+name:'Henok Assefa',
+grade:90,
+section:'10-C',
+year:'2025',
+behavior:'B',
+subjects:{Math:89,English:91,Physics:90,Chemistry:92,Biology:88,Civics:90}
+},
+{
+name:'Hana Belay',
+grade:89,
+section:'10-D',
+year:'2025',
+behavior:'B',
+subjects:{Math:88,English:89,Physics:90,Chemistry:87,Biology:91,Civics:89}
+},
+{
+name:'Kidus Worku',
+grade:88,
+section:'10-A',
+year:'2025',
+behavior:'B',
+subjects:{Math:89,English:87,Physics:88,Chemistry:90,Biology:85,Civics:89}
+},
+{
+name:'Betty Demissie',
+grade:87,
+section:'10-B',
+year:'2025',
+behavior:'B',
+subjects:{Math:88,English:89,Physics:86,Chemistry:85,Biology:90,Civics:84}
+},
+{
+name:'Natnael Birhanu',
+grade:86,
+section:'10-C',
+year:'2025',
+behavior:'B',
+subjects:{Math:87,English:85,Physics:88,Chemistry:84,Biology:89,Civics:83}
+},
+{
+name:'Hiwot Solomon',
+grade:85,
+section:'10-D',
+year:'2025',
+behavior:'B',
+subjects:{Math:86,English:84,Physics:87,Chemistry:85,Biology:83,Civics:86}
+},
+{
+name:'Biniam Zeleke',
+grade:84,
+section:'10-A',
+year:'2025',
+behavior:'B',
+subjects:{Math:85,English:83,Physics:86,Chemistry:84,Biology:82,Civics:85}
+},
+{
+name:'Selam Fekadu',
+grade:82,
+section:'10-B',
+year:'2025',
+behavior:'B',
+subjects:{Math:83,English:81,Physics:84,Chemistry:82,Biology:85,Civics:80}
+},
+{
+name:'Addis Tsegaye',
+grade:80,
+section:'10-C',
+year:'2025',
+behavior:'C',
+subjects:{Math:80,English:79,Physics:81,Chemistry:82,Biology:78,Civics:80}
+},
+{
+name:'Zenebech Ayele',
+grade:78,
+section:'10-D',
+year:'2025',
+behavior:'C',
+subjects:{Math:77,English:79,Physics:80,Chemistry:76,Biology:78,Civics:79}
+},
+{
+name:'Elias Haile',
+grade:76,
+section:'10-A',
+year:'2025',
+behavior:'C',
+subjects:{Math:75,English:77,Physics:78,Chemistry:76,Biology:74,Civics:77}
+},
+{
+name:'Tigist Mariam',
+grade:74,
+section:'10-B',
+year:'2025',
+behavior:'C',
+subjects:{Math:74,English:73,Physics:75,Chemistry:76,Biology:72,Civics:74}
+},
+{
+name:'Dawit Tekle',
+grade:72,
+section:'10-C',
+year:'2025',
+behavior:'C',
+subjects:{Math:71,English:73,Physics:74,Chemistry:70,Biology:72,Civics:71}
+},
+{
+name:'Fikirte Adugna',
+grade:70,
+section:'10-D',
+year:'2025',
+behavior:'C',
+subjects:{Math:69,English:71,Physics:70,Chemistry:72,Biology:68,Civics:70}
+}
+];
+
+function openLogin(){
+document.getElementById('welcomePage').style.display='none';
+document.getElementById('loginPage').style.display='block';
+}
+
+function togglePassword(id){
+const input=document.getElementById(id);
+input.type=input.type==='password'?'text':'password';
+}
+
+function validateEmail(email){
+const pattern=/^[^^\s@]+@[^\s@]+\.[^\s@]+$/;
+return pattern.test(email);
+}
+
+function login(role){
+let passField='';
+
+if(role==='Student') passField='studentPass';
+if(role==='Parent') passField='parentPass';
+if(role==='Teacher') passField='teacherPass';
+if(role==='Director') passField='directorPass';
+if(role==='Administrator') passField='adminPass';
+
+const password=document.getElementById(passField).value;
+
+let emailField='';
+
+if(role==='Student') emailField='studentEmail';
+if(role==='Parent') emailField='parentEmail';
+if(role==='Teacher') emailField='teacherEmail';
+if(role==='Director') emailField='directorEmail';
+if(role==='Administrator') emailField='adminEmail';
+
+const email=document.getElementById(emailField).value;
+
+if(!validateEmail(email)){
+alert('Invalid email address. Example: student@gmail.com');
+return;
+}
+
+if(password.length<6){
+alert('Password must contain at least 6 characters');
+return;
+}
+
+currentRole=role;
+
+alert(role + ' Login Successful');
+
+document.getElementById('loginPage').style.display='none';
+document.getElementById('dashboardPage').style.display='block';
+
+loadDashboard();
+}
+
+function loadDashboard(){
+
+let title=currentRole + ' Dashboard';
+let welcome='';
+
+if(currentRole==='Student'){
+welcome='Welcome Student. View rankings, performance and results.';
+}
+
+if(currentRole==='Parent'){
+welcome='See your child performance and contact teachers.';
+}
+
+if(currentRole==='Teacher'){
+welcome='Manage students and update scores.';
+}
+
+if(currentRole==='Director'){
+welcome='Monitor school performance and discipline.';
+}
+
+if(currentRole==='Administrator'){
+welcome='Control the entire school management system.';
+}
+
+
+document.getElementById('dashboardTitle').innerText=title;
+document.getElementById('welcomeText').innerText=welcome;
+
+let html='';
+
+students.forEach((student,index)=>{
+
+let behaviorClass='behaviorA';
+
+if(student.behavior==='B') behaviorClass='behaviorB';
+if(student.behavior==='C') behaviorClass='behaviorC';
+
+html+=`
+<tr onclick="openStudent(${index})">
+<td>#${index+1}</td>
+<td>${student.name}</td>
+<td>${student.grade}%</td>
+<td>${student.section}</td>
+<td class="${behaviorClass}">${student.behavior}</td>
+</tr>
+`;
+});
+
+
+document.getElementById('studentTable').innerHTML=html;
+}
+
+function openStudent(index){
+
+const student=students[index];
+
+
+document.getElementById('overlay').style.display='block';
+document.getElementById('studentModal').style.display='block';
+
+
+document.getElementById('studentName').innerText=student.name;
+
+document.getElementById('studentInfo').innerHTML=`
+Year: ${student.year}<br>
+Section: ${student.section}<br>
+Rank: #${index+1}<br>
+Behavior: ${student.behavior}
+`;
+
+let message='';
+let messageClass='good';
+
+if(student.grade>=90){
+message='Excellent Performance! You are among the top students in Bashewam School. Keep shining and inspiring others.';
+messageClass='good';
+}
+else if(student.grade>=80){
+message='Good Performance! Continue studying hard to reach the top rankings.';
+messageClass='average';
+}
+else{
+message='Needs Improvement. Student needs more focus and support in class activities.';
+messageClass='bad';
+}
+
+const performance=document.getElementById('performanceMessage');
+performance.innerText=message;
+performance.className='performance-box '+messageClass;
+
+let subjects='';
+
+for(let sub in student.subjects){
+subjects+=`
+<div class="subject-card">
+<h3>${sub}</h3>
+<p>${student.subjects[sub]}%</p>
+</div>
+`;
+}
+
+
+document.getElementById('subjectResults').innerHTML=subjects;
+
+let special='';
+
+if(currentRole==='Parent'){
+
+special=`
+<div class="performance-box ${student.behavior==='A'?'good':student.behavior==='B'?'average':'bad'}">
+${student.name} is currently showing ${student.behavior==='A'?'excellent discipline, active classroom participation and strong academic focus. Your child is respectful and performing very well in school activities.':student.behavior==='B'?'good progress in class with average discipline and participation. Your child should focus more on homework and classroom confidence to improve ranking.':'low classroom performance and needs close follow-up from parents. Your child requires better discipline, attendance and study habits for improvement.'}
+</div>
+
+<h2>Teachers Contact</h2>`;
+
+teachers.forEach(t=>{
+special+=`
+<div class="teacher-box">
+<b>${t.name}</b><br>
+Subject: ${t.subject}<br>
+Email: ${t.email}<br>
+Phone: ${t.phone}
+</div>
+`;
+});
+
+special+=`
+<div class="teacher-box">
+<b>School Director</b><br>
+Phone: 0911000000
+</div>
+`;
+
+if(student.behavior==='C'){
+special+=`
+<div class="performance-box bad">
+Your child is currently in the warning list because of low performance or discipline issues.
+</div>
+`;
+}
+}
+
+if(currentRole==='Teacher'){
+
+special=`
+<h2>Teacher Control Panel</h2>
+<div class="edit-box">
+<input type="number" id="newGrade" placeholder="Enter New Overall Grade">
+<button class="btn" onclick="updateGrade(${index})">Update Grade</button>
+</div>
+`;
+}
+
+if(currentRole==='Director'){
+
+special=`
+<h2>Director Analytics</h2>
+<div class="teacher-box">
+School Discipline Status: Stable<br>
+Top Student: ${students[0].name}<br>
+Students In Warning List: 6<br>
+Average School Performance: 85%
+</div>
+`;
+}
+
+if(currentRole==='Administrator'){
+
+special=`
+<h2>Administrator Panel</h2>
+<div class="teacher-box">
+System Status: Active<br>
+Database: Connected<br>
+Teachers Registered: 6<br>
+Students Registered: 20
+</div>
+
+<div class="edit-box">
+<input type="text" placeholder="Add Announcement">
+<button class="btn">Publish Announcement</button>
+</div>
+`;
+}
+
+if(currentRole==='Student'){
+
+special=`
+<div class="teacher-box">
+Continue working hard and maintain good discipline to improve your ranking.
+</div>
+`;
+}
+
+
+document.getElementById('specialSection').innerHTML=special;
+}
+
+function updateGrade(index){
+const value=document.getElementById('newGrade').value;
+
+if(value===''){
+alert('Please enter new grade');
+return;
+}
+
+students[index].grade=value;
+alert('Student grade updated successfully');
+closeModal();
+loadDashboard();
+}
+
+function closeModal(){
+document.getElementById('overlay').style.display='none';
+document.getElementById('studentModal').style.display='none';
+}
+
+function logout(){
+location.reload();
+}
+
+function searchStudent(){
+const input=document.getElementById('searchInput').value.toLowerCase();
+const rows=document.querySelectorAll('#studentTable tr');
+
+rows.forEach(row=>{
+const text=row.innerText.toLowerCase();
+row.style.display=text.includes(input)?'':'none';
+});
+}
+
+</script>
+</body>
+</html>
